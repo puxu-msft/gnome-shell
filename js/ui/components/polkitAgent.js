@@ -462,7 +462,14 @@ class AuthenticationAgent extends Shell.PolkitAuthenticationAgent {
         this._completeRequest(false);
     }
 
-    _onDialogDone(_dialog, dismissed) {
+    _onDialogDone(dialog, dismissed) {
+        // A dialog that is still closing belongs to a request that was
+        // already completed, don't let it complete the current one
+        if (dialog !== this._currentDialog) {
+            dialog.close();
+            return;
+        }
+
         this._completeRequest(dismissed);
     }
 
