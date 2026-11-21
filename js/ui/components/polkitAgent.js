@@ -389,6 +389,11 @@ const AuthenticationDialog = GObject.registerClass({
         if (this.state === ModalDialog.State.CLOSED)
             this._onDialogClosed();
         super.close(timestamp);
+
+        // Stop authenticating now rather than once the dialog is closed;
+        // otherwise the session can still fail and reopen the dialog,
+        // which never finishes closing while there is no monitor
+        this._destroySession();
     }
 
     cancel() {
