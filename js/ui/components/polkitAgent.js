@@ -462,7 +462,9 @@ class AuthenticationAgent extends Shell.PolkitAuthenticationAgent {
     }
 
     _completeRequest(dismissed) {
-        this._currentDialog.close();
+        // There is no dialog yet if the request is cancelled while
+        // the screen is locked
+        this._currentDialog?.close();
         this._currentDialog = null;
 
         Main.sessionMode.disconnectObject(this);
